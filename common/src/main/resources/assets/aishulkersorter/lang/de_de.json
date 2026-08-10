@@ -1,0 +1,79 @@
+{
+  "key.aishulkersorter.sort": "Shulker Boxes sortieren",
+  "category.aishulkersorter": "AIShulkerSorter",
+  "key.category.aishulkersorter.aishulkersorter": "AIShulkerSorter",
+  "aishulkersorter.hud.sorting": "Sortiere",
+  "aishulkersorter.tooltip.empty": "Leer",
+  "aishulkersorter.tooltip.contents": "Inhalt:",
+  "aishulkersorter.tooltip.more": "... und %1$s weitere Items",
+  "aishulkersorter.message.success": "AIShulkerSorter: %1$s Boxen sortiert, %2$s Items verteilt.",
+  "aishulkersorter.message.error.no_boxes": "Keine Shulker Boxes im Inventar gefunden!",
+  "aishulkersorter.message.error.all_locked": "Alle Shulker Boxes sind gesperrt!",
+  "aishulkersorter.message.error.all_empty": "Alle Shulker Boxes sind leer!",
+  "aishulkersorter.message.error.not_enough_space": "Nicht genug Shulker Boxes fuer alle Items! Sortierung abgebrochen.",
+  "aishulkersorter.message.error.internal": "Interner Fehler bei der Verteilung!",
+  "aishulkersorter.message.error.multiplayer_no_mod": "AIShulkerSorter ist auf diesem Server nicht installiert.",
+  "aishulkersorter.message.undo_success": "Sortierung rückgängig gemacht.",
+  "aishulkersorter.message.undo_nothing": "Nichts rückgängig zu machen.",
+
+  "aishulkersorter.category.redstone": "Redstone",
+  "aishulkersorter.category.transport": "Transport",
+  "aishulkersorter.category.nature": "Natur",
+  "aishulkersorter.category.mob_loot": "Mob-Drops",
+  "aishulkersorter.category.decoration": "Dekoration",
+  "aishulkersorter.category.blocks": "Bloecke",
+  "aishulkersorter.category.tools": "Werkzeuge",
+  "aishulkersorter.category.food": "Nahrung",
+  "aishulkersorter.category.ores": "Erze",
+  "aishulkersorter.category.brewing": "Brauen",
+  "aishulkersorter.category.misc": "Sonstiges",
+
+  "config.aishulkersorter.title": "AIShulkerSorter Einstellungen",
+
+  "config.aishulkersorter.category.sorting": "Sortierung",
+  "config.aishulkersorter.category.tooltip": "Tooltip",
+  "config.aishulkersorter.category.feedback": "Benachrichtigungen & Feedback",
+
+  "config.aishulkersorter.auto_label": "Boxen automatisch beschriften",
+  "config.aishulkersorter.auto_label.tooltip": "Shulker Boxes nach dem Sortieren automatisch umbenennen (z.B. 'Bloecke #1', 'Erze #2')",
+
+  "config.aishulkersorter.include_loose_items": "Lose Items einsortieren",
+  "config.aishulkersorter.include_loose_items.tooltip": "Auch lose Items aus dem Inventar in Shulker Boxes einsortieren (standardmaessig deaktiviert)",
+
+  "config.aishulkersorter.skip_empty_boxes": "Leere Boxen überspringen",
+  "config.aishulkersorter.skip_empty_boxes.tooltip": "Wenn aktiviert, werden leere Shulker Boxes beim Sortieren ignoriert und nicht verändert.",
+
+  "config.aishulkersorter.overflow_mode": "Ueberlauf-Modus",
+  "config.aishulkersorter.overflow_mode.tooltip": "Was passiert wenn mehr Items vorhanden sind als Shulker-Box-Slots verfuegbar.\n\nFuellen: Boxen werden kategorienuebergreifend befuellt — gemischter Inhalt ist bei Platzmangel erlaubt. Uebrige Items bleiben im Inventar.\n\nDominant: Jede Box erhaelt nur eine Kategorie. Nur die haueufigsten Kategorien (nach Itemanzahl) werden einsortiert; Items anderer Kategorien bleiben im Inventar.",
+  "config.aishulkersorter.overflow_mode.fill": "Fuellen (Mischung OK)",
+  "config.aishulkersorter.overflow_mode.dominant": "Dominant (Nur eine Kategorie)",
+
+  "config.aishulkersorter.loose_item_ignore_tag": "Lose Items Ignorieren-Tag",
+  "config.aishulkersorter.loose_item_ignore_tag.tooltip": "Items mit diesem Text im Namen werden nicht in Shulker Boxes einsortiert (z.B. Item umbenennen zu '[KEEP] Diamantschwert')",
+
+  "config.aishulkersorter.locked_tag": "Gesperrt-Tag",
+  "config.aishulkersorter.locked_tag.tooltip": "Shulker Boxes mit diesem Text im Namen werden beim Sortieren uebersprungen",
+
+  "config.aishulkersorter.tooltip_enabled": "Tooltip anzeigen",
+  "config.aishulkersorter.tooltip_enabled.tooltip": "Inhalt der Shulker Box beim Hovern anzeigen",
+
+  "config.aishulkersorter.tooltip_max_lines": "Tooltip Max. Zeilen",
+  "config.aishulkersorter.tooltip_max_lines.tooltip": "Maximale Anzahl der Item-Zeilen im Tooltip (1-27)",
+
+  "config.aishulkersorter.enable_chat_notifications": "Chat-Benachrichtigungen",
+  "config.aishulkersorter.enable_chat_notifications.tooltip": "Chat-Nachrichten anzeigen wenn Sortierung abgeschlossen oder fehlgeschlagen",
+
+  "config.aishulkersorter.enable_sound_effects": "Soundeffekte",
+  "config.aishulkersorter.enable_sound_effects.tooltip": "Sound abspielen wenn Sortierung erfolgreich abgeschlossen",
+
+  "config.aishulkersorter.enable_hud_overlay": "HUD-Anzeige",
+  "config.aishulkersorter.enable_hud_overlay.tooltip": "Animierte 'Sortiere...' Anzeige auf dem HUD waehrend der Sortierung",
+
+  "config.aishulkersorter.category.categories": "Kategorien",
+  "config.aishulkersorter.category_order": "Kategorienreihenfolge",
+  "config.aishulkersorter.category_order.tooltip": "Reihenfolge der Kategorien beim Sortieren. Items werden von oben nach unten zugeordnet; die erste Übereinstimmung gewinnt.",
+  "config.aishulkersorter.category.enabled": "Aktiviert",
+  "config.aishulkersorter.category.enabled.tooltip": "Deaktivierte Kategorien werden beim Sortieren übersprungen. Ihre Items landen in Sonstiges.",
+  "config.aishulkersorter.category.patterns": "Muster",
+  "config.aishulkersorter.category.patterns.tooltip": "Item-ID-Muster für diese Kategorie. Präfix: 'raw_' (Items die mit raw_ beginnen). Suffix: '_planks' (Items die auf _planks enden). Exakt oder Teilstring: 'redstone'."
+}

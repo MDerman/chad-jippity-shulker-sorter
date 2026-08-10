@@ -1,0 +1,15 @@
+architectury { common('fabric') }
+
+dependencies {
+	// compile-time only: provides the Mixin library. Never CALL loader classes from common.
+	modImplementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
+	// Architectury API (events and networking abstraction)
+	modCompileOnly "dev.architectury:architectury:${rootProject.architectury_version}"
+	// YACL for the config screen (client-only class, referenced from client entrypoints only)
+	modCompileOnly "dev.isxander:yet-another-config-lib:${rootProject.yacl_version}-fabric"
+	testImplementation platform('org.junit:junit-bom:5.11.4')
+	testImplementation 'org.junit.jupiter:junit-jupiter'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.withType(Test).configureEach { useJUnitPlatform() }

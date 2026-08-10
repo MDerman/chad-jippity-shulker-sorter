@@ -1,0 +1,8 @@
+# Adapt field names to owning Minecraft chart.
+minecraft:
+  mods:
+    - aishulkersorter-fabric-1.0.0+mc1.21.9-1.21.11.jar
+    - fabric-api.jar
+    - architectury-api.jar
+
+# No OPENAI_API_KEY belongs in server pod or Kubernetes Secret.

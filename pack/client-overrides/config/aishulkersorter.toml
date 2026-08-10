@@ -1,0 +1,9 @@
+model = "gpt-5.6-terra"
+sorting_instructions = "Keep food, rockets, tools, and ender pearls in my inventory.\\nCreate practical shulkers for building, redstone, valuables, mob drops, and farming."
+preview = true
+remember_api_key = false
+semantic_cache = true
+auto_label = true
+include_loose_items = true
+locked_tag = "[LOCKED]"
+loose_item_ignore_tag = "[KEEP]"

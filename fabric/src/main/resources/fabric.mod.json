@@ -1,0 +1,39 @@
+{
+	"schemaVersion": 1,
+	"id": "aishulkersorter",
+	"version": "${version}",
+	"name": "Chad Jippity Shulker Sorter",
+	"description": "AI-assisted, server-authoritative sorting for carried shulker boxes.",
+	"authors": [
+		"Matthew Derman"
+	],
+	"contributors": ["DennisTheGamer (original ShulkerSorter)"],
+	"license": "MIT",
+	"icon": "assets/aishulkersorter/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.matthewderman.aishulkersorter.fabric.AIShulkerSorterFabric"
+		],
+		"client": [
+			"dev.matthewderman.aishulkersorter.fabric.AIShulkerSorterFabricClient"
+		],
+		"modmenu": [
+			"dev.matthewderman.aishulkersorter.fabric.ModMenuIntegration"
+		]
+	},
+	"mixins": [
+		"aishulkersorter.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.3",
+		"minecraft": ">=1.21.9 <=1.21.11",
+		"java": ">=21",
+		"fabric-api": "*",
+		"architectury": ">=18.0.3"
+	},
+	"suggests": {
+		"modmenu": ">=17.0.0",
+		"yet_another_config_lib_v3": ">=3.7.0"
+	}
+}
