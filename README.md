@@ -47,6 +47,8 @@ Key precedence:
 
 Remembered key lives in `.minecraft/config/aishulkersorter.toml` as plaintext under `openrouter_api_key`. Default is off. Keys are never logged, bundled, packetized, or sent to Minecraft server.
 
+Run `/chadinit <API_KEY>` to save a key from Minecraft. This client-side command enables local key persistence and removes itself from recent command history after it runs.
+
 ## Authority Model
 
 Client sends only snapshot hash and semantic assignments. Server independently rebuilds inventory snapshot, rejects stale state, requires exact one-time reference coverage, rejects boxed refs marked loose, calculates stack splits/capacity, saves undo state, and applies changes after validation completes.

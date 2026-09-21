@@ -51,6 +51,7 @@
   "config.aishulkersorter.semantic_cache": "Remember AI Classifications",
   "config.aishulkersorter.clear_cache": "Forget AI Sorting Memory",
   "config.aishulkersorter.clear_cache.action": "Clear",
+  "aishulkersorter.command.chadinit.saved": "OpenRouter API key saved locally.",
 
   "aishulkersorter.preview.title": "AI Sort Plan",
   "aishulkersorter.preview.inventory": "Keep in Inventory",

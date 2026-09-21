@@ -8,4 +8,6 @@ Requires Fabric API, Architectury API, Mod Menu, and YACL on the client. Install
 
 Features: natural-language rules, strict Structured Outputs, stale-inventory hash validation, `[LOCKED]` boxes, `[KEEP]` loose items, automatic labels, semantic cache, preview, undo, tooltips, and deterministic fallback.
 
+Run `/chadinit <API_KEY>` to save an OpenRouter key in the local Minecraft instance config.
+
 Based on DennisTheGamer's MIT-licensed ShulkerSorter.

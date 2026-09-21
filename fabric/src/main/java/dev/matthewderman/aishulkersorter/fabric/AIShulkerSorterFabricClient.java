@@ -8,5 +8,6 @@ public final class AIShulkerSorterFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         AIShulkerSorterClient.init();
+        ChadInitCommand.register();
     }
 }
