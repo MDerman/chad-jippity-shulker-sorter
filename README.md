@@ -4,6 +4,8 @@ Fabric mod for Minecraft 1.21.9-1.21.11. GLM 5.3 groups inventory items through 
 
 Forked from [ShulkerSorter](https://github.com/dennisthegamer/ShulkerSorter) under MIT license.
 
+Modrinth project: [Chad Jippity Shulker Sorter](https://modrinth.com/mod/mbKNv70h) (`mbKNv70h`).
+
 ## Features
 
 - `J`: create semantic sort plan, preview it, then sort
@@ -70,6 +72,8 @@ fabric/build/libs/aishulkersorter-fabric-1.1.0+mc1.21.9-1.21.11.jar
 - `pack/client-overrides/config/aishulkersorter.toml`: key-free Modrinth client defaults
 - `deploy/helm-values.example.yaml`: server chart integration sketch
 - `.agents/plans/ai-shulker-sorter.md`: original implementation plan
+
+Maintainers: see [RELEASING.md](RELEASING.md) for the tag-based Modrinth release process.
 
 ## License
 
