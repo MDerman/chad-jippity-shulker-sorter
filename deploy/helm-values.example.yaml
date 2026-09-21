@@ -5,4 +5,4 @@ minecraft:
     - fabric-api.jar
     - architectury-api.jar
 
-# No OPENAI_API_KEY belongs in server pod or Kubernetes Secret.
+# No OPENROUTER_API_KEY belongs in the server pod or Kubernetes Secret.

@@ -16,16 +16,16 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
 
-public final class OpenAiClient {
-    private static final URI RESPONSES_URI = URI.create("https://api.openai.com/v1/responses");
+public final class OpenRouterClient {
+    private static final URI CHAT_COMPLETIONS_URI = URI.create("https://openrouter.ai/api/v1/chat/completions");
     private static final Gson GSON = new Gson();
     private final HttpClient httpClient;
 
-    public OpenAiClient() {
+    public OpenRouterClient() {
         this(HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(15)).build());
     }
 
-    OpenAiClient(HttpClient httpClient) {
+    OpenRouterClient(HttpClient httpClient) {
         this.httpClient = httpClient;
     }
 
@@ -33,13 +33,14 @@ public final class OpenAiClient {
                                String instructions, String model, String apiKey)
             throws IOException, InterruptedException {
         if (apiKey == null || apiKey.isBlank()) {
-            throw new IOException("No OpenAI API key. Set OPENAI_API_KEY or add a session key in Mod Menu.");
+            throw new IOException("No OpenRouter API key. Set OPENROUTER_API_KEY or add a session key in Mod Menu.");
         }
         JsonObject requestBody = requestBody(items, availableShulkers, instructions, model);
-        HttpRequest request = HttpRequest.newBuilder(RESPONSES_URI)
+        HttpRequest request = HttpRequest.newBuilder(CHAT_COMPLETIONS_URI)
                 .timeout(Duration.ofSeconds(60))
                 .header("Authorization", "Bearer " + apiKey)
                 .header("Content-Type", "application/json")
+                .header("X-OpenRouter-Title", "Chad Jippity Shulker Sorter")
                 .POST(HttpRequest.BodyPublishers.ofString(GSON.toJson(requestBody)))
                 .build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -51,53 +52,54 @@ public final class OpenAiClient {
                                   String instructions, String model) {
         JsonObject root = new JsonObject();
         root.addProperty("model", model);
-        root.addProperty("store", false);
-        root.addProperty("max_output_tokens", 4000);
+        root.addProperty("max_tokens", 4000);
         JsonObject reasoning = new JsonObject();
         reasoning.addProperty("effort", "low");
         root.add("reasoning", reasoning);
 
-        JsonArray input = new JsonArray();
-        input.add(message("system", "You organize Minecraft items. Group supplied item references into practical "
+        JsonArray messages = new JsonArray();
+        messages.add(message("system", "You organize Minecraft items. Group supplied item references into practical "
                 + "shulker categories. Do not invent refs. Every ref must appear exactly once. Only refs whose "
                 + "origin is LOOSE may appear in keepLoose. Prefer gameplay groupings. Respect user preferences."));
         JsonObject inventory = new JsonObject();
         inventory.addProperty("available_shulkers", availableShulkers);
         inventory.add("items", GSON.toJsonTree(items));
-        input.add(message("user", "USER PREFERENCES\n" + instructions + "\n\nINVENTORY\n" + GSON.toJson(inventory)));
-        root.add("input", input);
+        messages.add(message("user", "USER PREFERENCES\n" + instructions + "\n\nINVENTORY\n" + GSON.toJson(inventory)));
+        root.add("messages", messages);
 
-        JsonObject format = new JsonObject();
-        format.addProperty("type", "json_schema");
-        format.addProperty("name", "minecraft_sort_plan");
-        format.addProperty("strict", true);
-        format.add("schema", schema());
-        JsonObject text = new JsonObject();
-        text.add("format", format);
-        root.add("text", text);
+        JsonObject jsonSchema = new JsonObject();
+        jsonSchema.addProperty("name", "minecraft_sort_plan");
+        jsonSchema.addProperty("strict", true);
+        jsonSchema.add("schema", schema());
+        JsonObject responseFormat = new JsonObject();
+        responseFormat.addProperty("type", "json_schema");
+        responseFormat.add("json_schema", jsonSchema);
+        root.add("response_format", responseFormat);
+
+        JsonObject provider = new JsonObject();
+        provider.addProperty("require_parameters", true);
+        root.add("provider", provider);
         return root;
     }
 
     static SortPlan parsePlan(String responseBody) throws IOException {
         JsonObject response;
         try { response = JsonParser.parseString(responseBody).getAsJsonObject(); }
-        catch (RuntimeException e) { throw new IOException("OpenAI returned invalid JSON.", e); }
-        JsonArray outputItems = response.getAsJsonArray("output");
-        if (outputItems == null) throw new IOException("OpenAI response contained no output.");
-        for (JsonElement outputElement : outputItems) {
-            JsonObject output = outputElement.getAsJsonObject();
-            if (!output.has("content")) continue;
-            for (JsonElement contentElement : output.getAsJsonArray("content")) {
-                JsonObject content = contentElement.getAsJsonObject();
-                String type = content.has("type") ? content.get("type").getAsString() : "";
-                if ("refusal".equals(type)) throw new IOException("OpenAI refused the sorting request.");
-                if ("output_text".equals(type) && content.has("text")) {
-                    try { return GSON.fromJson(content.get("text").getAsString(), SortPlan.class); }
-                    catch (RuntimeException e) { throw new IOException("OpenAI returned an invalid sort plan.", e); }
-                }
+        catch (RuntimeException e) { throw new IOException("OpenRouter returned invalid JSON.", e); }
+        JsonArray choices = response.getAsJsonArray("choices");
+        if (choices == null || choices.isEmpty()) throw new IOException("OpenRouter response contained no choices.");
+        for (JsonElement choiceElement : choices) {
+            JsonObject message = choiceElement.getAsJsonObject().getAsJsonObject("message");
+            if (message == null) continue;
+            if (message.has("refusal") && !message.get("refusal").isJsonNull()) {
+                throw new IOException("OpenRouter refused the sorting request.");
+            }
+            if (message.has("content") && message.get("content").isJsonPrimitive()) {
+                try { return GSON.fromJson(message.get("content").getAsString(), SortPlan.class); }
+                catch (RuntimeException e) { throw new IOException("OpenRouter returned an invalid sort plan.", e); }
             }
         }
-        throw new IOException("OpenAI response contained no sort plan.");
+        throw new IOException("OpenRouter response contained no sort plan.");
     }
 
     private static JsonObject message(String role, String content) {
@@ -139,7 +141,7 @@ public final class OpenAiClient {
     }
 
     private static IOException apiError(int status, String body) {
-        String message = "OpenAI request failed (HTTP " + status + ").";
+        String message = "OpenRouter request failed (HTTP " + status + ").";
         try {
             JsonObject error = JsonParser.parseString(body).getAsJsonObject().getAsJsonObject("error");
             if (error != null && error.has("message")) message += " " + error.get("message").getAsString();

@@ -99,7 +99,7 @@ public class ConfigScreen {
                         .name(Component.translatable("config.aishulkersorter.category.ai"))
                         .option(Option.<String>createBuilder()
                                 .name(Component.translatable("config.aishulkersorter.model"))
-                                .binding("gpt-5.6-terra", () -> config.model, val -> config.model = val.trim())
+                                .binding("z-ai/glm-5.3", () -> config.model, val -> config.model = val.trim())
                                 .controller(StringControllerBuilder::create)
                                 .build())
                         .option(Option.<String>createBuilder()

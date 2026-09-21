@@ -1,6 +1,6 @@
 package dev.matthewderman.aishulkersorter.screen;
 
-import dev.matthewderman.aishulkersorter.client.OpenAiClient;
+import dev.matthewderman.aishulkersorter.client.OpenRouterClient;
 import dev.matthewderman.aishulkersorter.config.AIShulkerSorterConfig;
 import dev.matthewderman.aishulkersorter.model.InventorySnapshot;
 import net.minecraft.client.gui.GuiGraphics;
@@ -55,7 +55,7 @@ public final class ApiKeyScreen extends Screen {
         status = Component.translatable("config.aishulkersorter.api_key.testing");
         CompletableFuture.runAsync(() -> {
             try {
-                new OpenAiClient().createPlan(List.of(new InventorySnapshot.ItemRef("l1", "minecraft:stone",
+                new OpenRouterClient().createPlan(List.of(new InventorySnapshot.ItemRef("l1", "minecraft:stone",
                         "Stone", 1, false, InventorySnapshot.Origin.LOOSE)), 1,
                         "Keep the test item loose.", config.model, candidate);
                 minecraft.execute(() -> status = Component.translatable("config.aishulkersorter.api_key.success"));

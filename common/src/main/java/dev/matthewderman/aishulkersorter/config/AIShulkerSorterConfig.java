@@ -13,7 +13,7 @@ public class AIShulkerSorterConfig {
     private final Path configPath;
     private static String sessionApiKey = "";
 
-    public String model = "gpt-5.6-terra";
+    public String model = "z-ai/glm-5.3";
     public String sortingInstructions = "Keep food, rockets, tools, and ender pearls in my inventory.\n"
             + "Create practical shulkers for building, redstone, valuables, mob drops, and farming.\n"
             + "Keep related material families together and combine rare items sensibly.";
@@ -145,12 +145,12 @@ public class AIShulkerSorterConfig {
             Map<String, Object> data = TomlParser.parse(configPath);
 
             autoLabel = TomlParser.getBoolean(data, "auto_label", autoLabel);
-            model = TomlParser.getString(data, "model", model);
+            model = TomlParser.getString(data, "openrouter_model", model);
             sortingInstructions = TomlParser.getString(data, "sorting_instructions", sortingInstructions);
             preview = TomlParser.getBoolean(data, "preview", preview);
             rememberApiKey = TomlParser.getBoolean(data, "remember_api_key", rememberApiKey);
             semanticCache = TomlParser.getBoolean(data, "semantic_cache", semanticCache);
-            persistedApiKey = rememberApiKey ? TomlParser.getString(data, "api_key", "") : "";
+            persistedApiKey = rememberApiKey ? TomlParser.getString(data, "openrouter_api_key", "") : "";
             lockedTag = TomlParser.getString(data, "locked_tag", lockedTag);
             tooltipEnabled = TomlParser.getBoolean(data, "tooltip_enabled", tooltipEnabled);
             tooltipMaxLines = TomlParser.getInt(data, "tooltip_max_lines", tooltipMaxLines);
@@ -194,12 +194,12 @@ public class AIShulkerSorterConfig {
         try {
             Map<String, Object> data = new LinkedHashMap<>();
             data.put("auto_label", autoLabel);
-            data.put("model", model);
+            data.put("openrouter_model", model);
             data.put("sorting_instructions", sortingInstructions);
             data.put("preview", preview);
             data.put("remember_api_key", rememberApiKey);
             data.put("semantic_cache", semanticCache);
-            if (rememberApiKey && !sessionApiKey.isBlank()) data.put("api_key", sessionApiKey);
+            if (rememberApiKey && !sessionApiKey.isBlank()) data.put("openrouter_api_key", sessionApiKey);
             data.put("locked_tag", lockedTag);
             data.put("tooltip_enabled", tooltipEnabled);
             data.put("tooltip_max_lines", tooltipMaxLines);
@@ -239,7 +239,7 @@ public class AIShulkerSorterConfig {
     }
 
     public String apiKey() {
-        String environmentKey = System.getenv("OPENAI_API_KEY");
+        String environmentKey = System.getenv("OPENROUTER_API_KEY");
         if (environmentKey != null && !environmentKey.isBlank()) return environmentKey.trim();
         if (!sessionApiKey.isBlank()) return sessionApiKey;
         return persistedApiKey;
@@ -251,7 +251,7 @@ public class AIShulkerSorterConfig {
     }
 
     public boolean hasEnvironmentApiKey() {
-        String key = System.getenv("OPENAI_API_KEY");
+        String key = System.getenv("OPENROUTER_API_KEY");
         return key != null && !key.isBlank();
     }
 }

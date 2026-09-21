@@ -15,10 +15,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 public final class AiSortPlanner {
-    private final OpenAiClient client;
+    private final OpenRouterClient client;
 
-    public AiSortPlanner() { this(new OpenAiClient()); }
-    AiSortPlanner(OpenAiClient client) { this.client = client; }
+    public AiSortPlanner() { this(new OpenRouterClient()); }
+    AiSortPlanner(OpenRouterClient client) { this.client = client; }
 
     public CompletableFuture<SortPlan> plan(InventorySnapshot snapshot) {
         AIShulkerSorterConfig config = AIShulkerSorterConfig.getInstance();
@@ -76,7 +76,7 @@ public final class AiSortPlanner {
     }
 
     static void validate(SortPlan plan, List<InventorySnapshot.ItemRef> requested) throws IOException {
-        if (plan == null) throw new IOException("OpenAI returned an empty sort plan.");
+        if (plan == null) throw new IOException("OpenRouter returned an empty sort plan.");
         if (!plan.duplicateRefs().isEmpty()) throw new IOException("Sort plan contains duplicate item references.");
         Set<String> expected = requested.stream().map(InventorySnapshot.ItemRef::ref)
                 .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
