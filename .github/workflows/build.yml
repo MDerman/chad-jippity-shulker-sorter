@@ -1,6 +1,12 @@
-name: build
+name: build and release
 
-on: [pull_request, push]
+on:
+  pull_request:
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -18,3 +24,99 @@ jobs:
         with:
           name: aishulkersorter-fabric
           path: fabric/build/libs/aishulkersorter-fabric-*.jar
+          if-no-files-found: error
+
+  publish-modrinth:
+    name: publish to Modrinth
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    env:
+      MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: aishulkersorter-fabric
+          path: dist
+      - name: Validate release
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          : "${MODRINTH_PROJECT_ID:?Set the MODRINTH_PROJECT_ID repository variable}"
+          : "${MODRINTH_TOKEN:?Set the MODRINTH_TOKEN repository secret}"
+
+          release_version="${GITHUB_REF_NAME#v}"
+          project_version="$(sed -n 's/^mod_version=//p' gradle.properties)"
+          if [[ "$release_version" != "$project_version" ]]; then
+            echo "Tag $GITHUB_REF_NAME does not match mod_version=$project_version" >&2
+            exit 1
+          fi
+
+          mapfile -d '' jars < <(find dist -type f \
+            -name "aishulkersorter-fabric-${release_version}+mc*.jar" \
+            ! -name '*-sources.jar' \
+            ! -name '*-dev*.jar' \
+            -print0)
+          if [[ "${#jars[@]}" -ne 1 ]]; then
+            echo "Expected one release JAR, found ${#jars[@]}" >&2
+            exit 1
+          fi
+
+          echo "RELEASE_VERSION=$release_version" >> "$GITHUB_ENV"
+          echo "RELEASE_JAR=${jars[0]}" >> "$GITHUB_ENV"
+      - name: Publish release
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          changelog="$(awk -v version="$RELEASE_VERSION" '
+            index($0, "## [" version "]") == 1 { capture = 1; next }
+            capture && /^## / { exit }
+            capture { print }
+          ' CHANGELOG.md)"
+          if [[ -z "${changelog//[[:space:]]/}" ]]; then
+            echo "CHANGELOG.md has no section for $RELEASE_VERSION" >&2
+            exit 1
+          fi
+
+          metadata="$(jq -n \
+            --arg project_id "$MODRINTH_PROJECT_ID" \
+            --arg version "$RELEASE_VERSION" \
+            --arg changelog "$changelog" \
+            '{
+              project_id: $project_id,
+              name: $version,
+              version_number: $version,
+              changelog: $changelog,
+              version_type: "release",
+              loaders: ["fabric"],
+              game_versions: ["1.21.9", "1.21.10", "1.21.11"],
+              dependencies: [
+                {project_id: "P7dR8mSH", dependency_type: "required"},
+                {project_id: "lhGA9TYQ", dependency_type: "required"},
+                {project_id: "mOgUt4GM", dependency_type: "optional"},
+                {project_id: "1eAoo2KR", dependency_type: "optional"}
+              ],
+              featured: true,
+              status: "listed",
+              environment: "client_and_server",
+              file_parts: ["mod"],
+              primary_file: "mod"
+            }')"
+
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --header "Authorization: $MODRINTH_TOKEN" \
+            --header "User-Agent: MDerman/chad-jippity-shulker-sorter (github.com/MDerman/chad-jippity-shulker-sorter)" \
+            --form-string "data=$metadata" \
+            --form "mod=@$RELEASE_JAR" \
+            https://api.modrinth.com/v2/version \
+            > modrinth-release.json
+
+          version_id="$(jq -er '.id' modrinth-release.json)"
+          echo "Published Modrinth version $version_id"

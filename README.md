@@ -62,7 +62,7 @@ Client sends only snapshot hash and semantic assignments. Server independently r
 Artifact:
 
 ```text
-fabric/build/libs/aishulkersorter-fabric-1.0.0+mc1.21.9-1.21.11.jar
+fabric/build/libs/aishulkersorter-fabric-1.1.0+mc1.21.9-1.21.11.jar
 ```
 
 ## Packaging

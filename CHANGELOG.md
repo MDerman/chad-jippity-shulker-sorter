@@ -2,11 +2,17 @@
 
 ## Unreleased
 
+## [1.1.0] - 2026-09-21
+
+### Added
+
+- Added the client-side `/chadinit <API_KEY>` setup command
+- Added automatic Modrinth publishing for matching `v*` tags
+
 ### Changed
 
 - Replaced the OpenAI client with OpenRouter and made `z-ai/glm-5.3` the default model
 - Switched config to `openrouter_model`, `OPENROUTER_API_KEY`, and `openrouter_api_key`
-- Added the client-side `/chadinit <API_KEY>` setup command
 
 ## [1.0.0] - 2026-08-10
 
